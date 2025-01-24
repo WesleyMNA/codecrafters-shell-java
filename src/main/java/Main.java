@@ -1,13 +1,11 @@
-import java.util.Scanner;
+import controllers.ShellController;
+import views.ShellView;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            System.out.print("$ ");
-            String input = scanner.nextLine();
-            System.out.println(input + ": command not found");
-        }
+    public static void main(String[] args) {
+        ShellView view = new ShellView();
+        ShellController controller = new ShellController(view);
+        controller.startRepl();
     }
 }
