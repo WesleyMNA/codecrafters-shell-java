@@ -1,11 +1,10 @@
-import controllers.ShellController;
-import views.ShellView;
+import commands.CommandFactory;
+import shell.Shell;
 
 public class Main {
 
     public static void main(String[] args) {
-        ShellView view = new ShellView();
-        ShellController controller = new ShellController(view);
-        controller.startRepl();
+        var factory = CommandFactory.getInstance();
+        new Shell(factory).startRepl();
     }
 }
