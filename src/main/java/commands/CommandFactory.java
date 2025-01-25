@@ -2,6 +2,7 @@ package commands;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class CommandFactory {
 
@@ -11,6 +12,7 @@ public class CommandFactory {
     private CommandFactory() {
         builtins.put("exit", new ExitCommand());
         builtins.put("echo", new EchoCommand());
+        builtins.put("type", new TypeCommand(this));
     }
 
     public static CommandFactory getInstance() {
@@ -24,8 +26,11 @@ public class CommandFactory {
         builtins.put(name, command);
     }
 
-    public Command getBuiltin(String name) {
-        return builtins.get(name);
+    public Optional<Command> getCommand(String name) {
+        Command command = builtins.get(name);
+        return command != null
+                ? Optional.of(command)
+                : Optional.empty();
     }
 
     public boolean contains(String command) {

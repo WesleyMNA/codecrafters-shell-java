@@ -1,13 +1,11 @@
 package shell;
 
-import commands.Command;
 import commands.CommandFactory;
 import prompt.PromptDto;
 import prompt.PromptInputTokenizer;
 import prompt.PromptTranslator;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Shell {
@@ -30,12 +28,12 @@ public class Shell {
 
             List<String> keywords = new PromptInputTokenizer(input).tokenize();
             PromptDto prompt = new PromptTranslator(keywords).translate();
-
-            Command command = commandFactory.getBuiltin(prompt.command());
-            if (Objects.nonNull(command))
-                command.execute(prompt);
-            else
-                System.out.println(prompt.command() + ": command not found");
+            commandFactory
+                    .getCommand(prompt.command())
+                    .ifPresentOrElse(
+                            command -> command.execute(prompt),
+                            () -> System.out.println(prompt.command() + ": command not found")
+                    );
         }
     }
 }
