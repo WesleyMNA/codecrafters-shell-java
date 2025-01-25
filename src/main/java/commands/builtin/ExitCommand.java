@@ -2,7 +2,12 @@ package commands.builtin;
 
 import prompt.PromptDto;
 
-public class ExitCommand implements Builtin {
+public class ExitCommand implements BuiltinCommand {
+
+    @Override
+    public String name() {
+        return "exit";
+    }
 
     @Override
     public void execute(PromptDto input) {
