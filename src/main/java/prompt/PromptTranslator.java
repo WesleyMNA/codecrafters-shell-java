@@ -14,7 +14,8 @@ public class PromptTranslator {
         String command = keywords.getFirst();
         return new PromptDto(
                 command,
-                keywords.subList(1, keywords.size())
+                keywords.subList(1, keywords.size()),
+                keywords
         );
     }
 }
