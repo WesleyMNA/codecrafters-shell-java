@@ -1,8 +1,8 @@
-package commands;
+package commands.builtin;
 
 import prompt.PromptDto;
 
-class EchoCommand implements Command {
+public class EchoCommand implements Builtin {
 
     @Override
     public void execute(PromptDto input) {
