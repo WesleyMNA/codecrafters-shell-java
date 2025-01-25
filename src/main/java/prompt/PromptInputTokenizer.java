@@ -29,9 +29,9 @@ public class PromptInputTokenizer {
         for (int charIndex = 0; charIndex < input.length(); charIndex++) {
             char character = input.charAt(charIndex);
 
-            if (character == '\'' && !isInsideDoubleQuotes) {
+            if (character == '\'' && !isInsideDoubleQuotes && !isAfterBackslash) {
                 isInsideSingleQuotes = !isInsideSingleQuotes;
-            } else if (character == '"' && !isInsideSingleQuotes) {
+            } else if (character == '"' && !isInsideSingleQuotes && !isAfterBackslash) {
                 isInsideDoubleQuotes = !isInsideDoubleQuotes;
             } else if (isAfterBackslash) {
                 builder.append(character);
