@@ -25,7 +25,11 @@ public class CdCommand implements BuiltinCommand {
 
         if (dir.startsWith("/"))
             changeDir(dir);
-        else {
+        else if (dir.startsWith("~")) {
+            String usersDir = System.getenv("HOME");
+            Path path = Path.of(usersDir);
+            changeDir(path.toString());
+        } else {
             Path path = Path.of(workingDirectory.getCurrentDir()).resolve(dir).normalize();
             changeDir(path.toString());
         }
