@@ -4,6 +4,7 @@ import models.WorkingDirectory;
 import prompt.PromptDto;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public class CdCommand implements BuiltinCommand {
 
@@ -22,6 +23,15 @@ public class CdCommand implements BuiltinCommand {
     public void execute(PromptDto input) {
         String dir = input.args().getFirst();
 
+        if (dir.startsWith("/"))
+            changeDir(dir);
+        else {
+            Path path = Path.of(workingDirectory.getCurrentDir()).resolve(dir).normalize();
+            changeDir(path.toString());
+        }
+    }
+
+    private void changeDir(String dir) {
         if (new File(dir).isDirectory())
             workingDirectory.setCurrentDir(dir);
         else
