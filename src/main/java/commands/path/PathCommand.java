@@ -3,8 +3,7 @@ package commands.path;
 import commands.Command;
 import prompt.PromptDto;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
 
 public record PathCommand(
         String name,
@@ -13,19 +12,24 @@ public record PathCommand(
 
     @Override
     public void execute(PromptDto input) {
-        var builder = new ProcessBuilder();
-        builder.command(input.keywords());
+        var builder = createBuilder(input);
 
         try {
             Process process = builder.start();
-
-            try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null)
-                    System.out.println(line);
-            }
+            process.waitFor();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private ProcessBuilder createBuilder(PromptDto input) {
+        var builder = new ProcessBuilder();
+        builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        builder.redirectError(ProcessBuilder.Redirect.INHERIT);
+        builder.command(input.toPathCommand());
+
+        if (input.redirectStdout())
+            builder.redirectOutput(new File(input.redirectFilename()));
+        return builder;
     }
 }

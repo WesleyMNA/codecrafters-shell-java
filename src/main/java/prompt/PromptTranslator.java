@@ -33,7 +33,6 @@ public class PromptTranslator {
         return new PromptDto(
                 command,
                 args,
-                keywords,
                 redirectStdout,
                 redirectFilename
         );
