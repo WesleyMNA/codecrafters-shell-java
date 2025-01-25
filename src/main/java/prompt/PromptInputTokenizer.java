@@ -8,12 +8,14 @@ public class PromptInputTokenizer {
 
     private final String input;
     private StringBuilder builder;
+    private boolean isInsideSingleQuotes;
 
     private final Set<Character> charactersToIgnore = Set.of('\'', '\"', ' ');
 
     public PromptInputTokenizer(String input) {
         this.input = input;
         this.builder = new StringBuilder();
+        this.isInsideSingleQuotes = false;
     }
 
     public List<String> tokenize() {
@@ -22,7 +24,11 @@ public class PromptInputTokenizer {
         for (int charIndex = 0; charIndex < input.length(); charIndex++) {
             char character = input.charAt(charIndex);
 
-            if (!charactersToIgnore.contains(character)) {
+            if (character == '\'') {
+                isInsideSingleQuotes = !isInsideSingleQuotes;
+            } else if (isInsideSingleQuotes) {
+                builder.append(character);
+            } else if (!charactersToIgnore.contains(character)) {
                 builder.append(character);
             } else if (!builder.isEmpty()) {
                 keywords.add(builder.toString());
