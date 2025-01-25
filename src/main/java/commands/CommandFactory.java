@@ -2,6 +2,7 @@ package commands;
 
 import commands.builtin.EchoCommand;
 import commands.builtin.ExitCommand;
+import commands.builtin.PwdCommand;
 import commands.builtin.TypeCommand;
 import commands.path.PathCommandFinder;
 
@@ -21,6 +22,8 @@ public class CommandFactory {
         builtins.put(echoCommand.name(), echoCommand);
         var typeCommand = new TypeCommand(this);
         builtins.put(typeCommand.name(), typeCommand);
+        var pwdCommand = new PwdCommand();
+        builtins.put(pwdCommand.name(), pwdCommand);
         this.pathFinder = new PathCommandFinder();
     }
 
