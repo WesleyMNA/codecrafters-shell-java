@@ -19,4 +19,8 @@ public class WorkingDirectory {
     public String getCurrentDir() {
         return currentDir;
     }
+
+    public void setCurrentDir(String dir) {
+        this.currentDir = dir;
+    }
 }

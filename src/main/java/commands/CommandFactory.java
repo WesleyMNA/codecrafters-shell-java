@@ -1,9 +1,6 @@
 package commands;
 
-import commands.builtin.EchoCommand;
-import commands.builtin.ExitCommand;
-import commands.builtin.PwdCommand;
-import commands.builtin.TypeCommand;
+import commands.builtin.*;
 import commands.path.PathCommandFinder;
 
 import java.util.HashMap;
@@ -24,6 +21,8 @@ public class CommandFactory {
         builtins.put(typeCommand.name(), typeCommand);
         var pwdCommand = new PwdCommand();
         builtins.put(pwdCommand.name(), pwdCommand);
+        var cdCommand = new CdCommand();
+        builtins.put(cdCommand.name(), cdCommand);
         this.pathFinder = new PathCommandFinder();
     }
 
