@@ -30,6 +30,9 @@ public record PathCommand(
 
         if (input.redirectStdout())
             builder.redirectOutput(new File(input.redirectFilename()));
+        else if (input.redirectStderr())
+            builder.redirectError(new File(input.redirectFilename()));
+
         return builder;
     }
 }

@@ -7,6 +7,7 @@ public record PromptDto(
         String command,
         List<String> args,
         boolean redirectStdout,
+        boolean redirectStderr,
         String redirectFilename
 ) {
 
