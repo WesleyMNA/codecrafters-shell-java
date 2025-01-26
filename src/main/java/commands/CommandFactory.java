@@ -32,4 +32,12 @@ public class CommandFactory {
                 ? Optional.of(command)
                 : pathFinder.findCommand(name);
     }
+
+    public Optional<String> findCommandKey(String name) {
+        for (String key : builtins.keySet())
+            if (key.startsWith(name))
+                return Optional.of(key);
+
+        return Optional.empty();
+    }
 }
