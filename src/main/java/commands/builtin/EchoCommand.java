@@ -2,7 +2,7 @@ package commands.builtin;
 
 import prompt.PromptDto;
 
-public class EchoCommand extends FileWriter implements BuiltinCommand {
+public class EchoCommand extends RedirectFileWriter implements BuiltinCommand {
 
     @Override
     public String name() {
@@ -11,11 +11,11 @@ public class EchoCommand extends FileWriter implements BuiltinCommand {
 
     @Override
     public void execute(PromptDto input) {
-        if (input.redirectStdout())
-            write(input);
+        if (input.stdout().enabled())
+            write(input.redirectFilename(), input.args(), input.stdout().append());
         else {
-            if (input.redirectStderr())
-                write(input, "");
+            if (input.stderr().enabled())
+                write(input.redirectFilename(), "", input.stderr().append());
             System.out.println(String.join(" ", input.args()));
         }
     }

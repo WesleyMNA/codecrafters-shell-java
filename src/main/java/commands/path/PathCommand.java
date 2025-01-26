@@ -2,8 +2,11 @@ package commands.path;
 
 import commands.Command;
 import prompt.PromptDto;
+import prompt.PromptRedirect;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public record PathCommand(
         String name,
@@ -28,10 +31,21 @@ public record PathCommand(
         builder.redirectError(ProcessBuilder.Redirect.INHERIT);
         builder.command(input.toPathCommand());
 
-        if (input.redirectStdout())
-            builder.redirectOutput(new File(input.redirectFilename()));
-        else if (input.redirectStderr())
-            builder.redirectError(new File(input.redirectFilename()));
+        if (input.stdout().enabled()) {
+            var file = new File(input.redirectFilename());
+
+            if (input.stdout().append())
+                builder.redirectOutput(ProcessBuilder.Redirect.appendTo(file));
+            else
+                builder.redirectOutput(file);
+        } else if (input.stderr().enabled()) {
+            var file = new File(input.redirectFilename());
+
+            if (input.stdout().append())
+                builder.redirectError(ProcessBuilder.Redirect.appendTo(file));
+            else
+                builder.redirectError(file);
+        }
 
         return builder;
     }

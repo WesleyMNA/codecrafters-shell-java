@@ -6,8 +6,8 @@ import java.util.List;
 public record PromptDto(
         String command,
         List<String> args,
-        boolean redirectStdout,
-        boolean redirectStderr,
+        PromptRedirect stdout,
+        PromptRedirect stderr,
         String redirectFilename
 ) {
 

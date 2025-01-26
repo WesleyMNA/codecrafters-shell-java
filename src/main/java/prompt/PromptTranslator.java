@@ -8,13 +8,17 @@ public class PromptTranslator {
     private final List<String> keywords;
     private String redirectFilename;
     private boolean redirectStdout;
+    private boolean appendStdout;
     private boolean redirectStderr;
+    private boolean appendStdoutStderr;
 
     public PromptTranslator(List<String> keywords) {
         this.keywords = keywords;
         this.redirectFilename = null;
         this.redirectStdout = false;
+        this.appendStdout = false;
         this.redirectStderr = false;
+        this.appendStdoutStderr = false;
     }
 
     public PromptDto translate() {
@@ -27,7 +31,9 @@ public class PromptTranslator {
         if (redirectKey.isPresent()) {
             String redirectValue = redirectKey.get();
             redirectStdout = redirectValue.startsWith(">") || redirectValue.startsWith("1>");
+            appendStdout = redirectValue.equals(">>") || redirectValue.equals("1>>");
             redirectStderr = redirectValue.startsWith("2>");
+            appendStdoutStderr = redirectValue.equals("2>>");
             redirectFilename = keywords.getLast();
             args = args.subList(0, args.size() - 2);
         }
@@ -36,8 +42,8 @@ public class PromptTranslator {
         return new PromptDto(
                 command,
                 args,
-                redirectStdout,
-                redirectStderr,
+                new PromptRedirect(redirectStdout, appendStdout),
+                new PromptRedirect(redirectStderr, appendStdoutStderr),
                 redirectFilename
         );
     }
