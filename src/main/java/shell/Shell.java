@@ -73,14 +73,17 @@ public class Shell {
         if (!builder.isEmpty()) {
             commandFactory
                     .findCommandKey(builder.toString())
-                    .ifPresent(commandName -> {
-                        while (!builder.isEmpty()) {
-                            System.out.print("\b \b");
-                            builder.deleteCharAt(builder.length() - 1);
-                        }
-                        builder = new StringBuilder(commandName + " ");
-                        System.out.print(builder);
-                    });
+                    .ifPresentOrElse(
+                            commandName -> {
+                                while (!builder.isEmpty()) {
+                                    System.out.print("\b \b");
+                                    builder.deleteCharAt(builder.length() - 1);
+                                }
+                                builder = new StringBuilder(commandName + " ");
+                                System.out.print(builder);
+                            },
+                            () -> System.out.print('\u0007')
+                    );
         }
     }
 
@@ -92,10 +95,5 @@ public class Shell {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    private static void exec(String[] cmd) {
-
     }
 }
