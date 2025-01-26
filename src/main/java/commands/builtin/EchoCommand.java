@@ -13,7 +13,10 @@ public class EchoCommand extends FileWriter implements BuiltinCommand {
     public void execute(PromptDto input) {
         if (input.redirectStdout())
             write(input);
-        else
+        else {
+            if (input.redirectStderr())
+                write(input, "");
             System.out.println(String.join(" ", input.args()));
+        }
     }
 }
