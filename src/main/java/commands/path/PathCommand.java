@@ -2,11 +2,8 @@ package commands.path;
 
 import commands.Command;
 import prompt.PromptDto;
-import prompt.PromptRedirect;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public record PathCommand(
         String name,
@@ -41,7 +38,7 @@ public record PathCommand(
         } else if (input.stderr().enabled()) {
             var file = new File(input.redirectFilename());
 
-            if (input.stdout().append())
+            if (input.stderr().append())
                 builder.redirectError(ProcessBuilder.Redirect.appendTo(file));
             else
                 builder.redirectError(file);
