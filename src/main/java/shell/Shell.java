@@ -6,9 +6,7 @@ import prompt.PromptInputTokenizer;
 import prompt.PromptTranslator;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Shell {
 
@@ -82,26 +80,48 @@ public class Shell {
     }
 
     private void autoComplete() {
-        if (!builder.isEmpty()) {
-            autoCompleteOptions = commandFactory.findCommandKey(builder.toString());
+        if (builder.isEmpty())
+            return;
 
-            if (autoCompleteOptions.size() == 1) {
-                String commandName = autoCompleteOptions.iterator().next();
+        autoCompleteOptions = commandFactory.findCommandKey(builder.toString());
 
-                while (!builder.isEmpty()) {
-                    System.out.print("\b \b");
-                    builder.deleteCharAt(builder.length() - 1);
-                }
-
-                builder = new StringBuilder(commandName + " ");
-                System.out.print(builder);
-            } else {
-                if (autoCompleteOptions.size() > 1)
-                    showAutoCompleteOptions = true;
-
-                System.out.print('\u0007');
-            }
+        if (autoCompleteOptions.size() == 1) {
+            writeCommandInShell(autoCompleteOptions.iterator().next());
+            return;
         }
+
+        OptionalInt minLength = autoCompleteOptions
+                .stream()
+                .filter(s -> s.startsWith(builder.toString()))
+                .mapToInt(String::length)
+                .min();
+
+        List<String> shortestCommands = minLength.isPresent() ?
+                autoCompleteOptions
+                        .stream()
+                        .filter(s -> s.startsWith(builder.toString()) && s.length() == minLength.getAsInt())
+                        .toList() :
+                Collections.emptyList();
+
+        if (shortestCommands.size() == 1) {
+            writeCommandInShell(shortestCommands.getFirst());
+            return;
+        }
+
+        if (autoCompleteOptions.size() > 1)
+            showAutoCompleteOptions = true;
+
+        System.out.print('\u0007');
+    }
+
+    private void writeCommandInShell(String commandName) {
+        while (!builder.isEmpty()) {
+            System.out.print("\b \b");
+            builder.deleteCharAt(builder.length() - 1);
+        }
+
+        builder = new StringBuilder(commandName + " ");
+        System.out.print(builder);
     }
 
     private void enableRawMode() {
