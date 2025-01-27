@@ -55,12 +55,12 @@ public class Shell {
             } else if (ch == '\b' || ch == 127) {
                 deleteLastLetter();
             } else if (ch == '\t' && showAutoCompleteOptions) {
-                String options = String.join("  ", autoCompleteOptions);
+                String options = String.join("  ", autoCompleteOptions.stream().sorted().toList());
                 System.out.println("\n" + options);
                 showAutoCompleteOptions = false;
                 autoCompleteOptions.clear();
                 System.out.print("$ " + builder);
-            }else if (ch == '\t') {
+            } else if (ch == '\t') {
                 autoComplete();
             } else {
                 System.out.print(ch);
