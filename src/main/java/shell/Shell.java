@@ -55,7 +55,7 @@ public class Shell {
             } else if (ch == '\b' || ch == 127) {
                 deleteLastLetter();
             } else if (ch == '\t' && showAutoCompleteOptions) {
-                String options = String.join(" ", autoCompleteOptions);
+                String options = String.join("  ", autoCompleteOptions);
                 System.out.println("\n" + options);
                 showAutoCompleteOptions = false;
                 autoCompleteOptions.clear();
