@@ -86,7 +86,7 @@ public class Shell {
         autoCompleteOptions = commandFactory.findCommandKey(builder.toString());
 
         if (autoCompleteOptions.size() == 1) {
-            writeCommandInShell(autoCompleteOptions.iterator().next());
+            writeCommandInShell(autoCompleteOptions.iterator().next() + " ");
             return;
         }
 
@@ -120,7 +120,7 @@ public class Shell {
             builder.deleteCharAt(builder.length() - 1);
         }
 
-        builder = new StringBuilder(commandName + " ");
+        builder = new StringBuilder(commandName);
         System.out.print(builder);
     }
 
