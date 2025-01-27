@@ -6,21 +6,22 @@ import prompt.PromptInputTokenizer;
 import prompt.PromptTranslator;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Shell {
 
     private final CommandFactory commandFactory;
 
     private StringBuilder builder;
-    private List<String> autoCompleteOptions;
+    private Set<String> autoCompleteOptions;
     private boolean showAutoCompleteOptions;
 
     public Shell(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
         this.builder = new StringBuilder();
-        this.autoCompleteOptions = new ArrayList<>();
+        this.autoCompleteOptions = new HashSet<>();
         this.showAutoCompleteOptions = false;
     }
 
@@ -85,7 +86,7 @@ public class Shell {
             autoCompleteOptions = commandFactory.findCommandKey(builder.toString());
 
             if (autoCompleteOptions.size() == 1) {
-                String commandName = autoCompleteOptions.getFirst();
+                String commandName = autoCompleteOptions.iterator().next();
 
                 while (!builder.isEmpty()) {
                     System.out.print("\b \b");
