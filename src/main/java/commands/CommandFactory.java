@@ -38,6 +38,6 @@ public class CommandFactory {
             if (key.startsWith(name))
                 return Optional.of(key);
 
-        return Optional.empty();
+        return pathFinder.findCommandKey(name);
     }
 }
