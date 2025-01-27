@@ -31,10 +31,10 @@ public class CommandFactory {
                 : pathFinder.findCommand(name);
     }
 
-    public List<String> findCommandKey(String name) {
+    public Set<String> findCommandKey(String name) {
         for (String key : builtins.keySet())
             if (key.startsWith(name)) {
-                List<String> set = new ArrayList<>();
+                Set<String> set = new HashSet<>();
                 set.add(key);
                 return set;
             }

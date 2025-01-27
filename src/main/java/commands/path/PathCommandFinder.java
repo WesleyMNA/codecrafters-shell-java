@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class PathCommandFinder {
@@ -39,9 +39,9 @@ public class PathCommandFinder {
         return Optional.empty();
     }
 
-    public List<String> findCommandKey(String name) {
+    public Set<String> findCommandKey(String name) {
         String[] folders = path.split(":");
-        List<String> keys = new ArrayList<>();
+        Set<String> keys = new HashSet<>();
 
         for (String folder : folders) {
             try (Stream<Path> files = Files.list(Paths.get(folder));) {
