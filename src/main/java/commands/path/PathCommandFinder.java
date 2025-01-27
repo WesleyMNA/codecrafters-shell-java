@@ -50,8 +50,7 @@ public class PathCommandFinder {
 
                     if (commandKey.isPresent())
                         return commandKey;
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException ignored) {
                 }
             }
         }
