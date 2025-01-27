@@ -3,9 +3,7 @@ package commands;
 import commands.builtin.*;
 import commands.path.PathCommandFinder;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class CommandFactory {
 
@@ -33,10 +31,13 @@ public class CommandFactory {
                 : pathFinder.findCommand(name);
     }
 
-    public Optional<String> findCommandKey(String name) {
+    public List<String> findCommandKey(String name) {
         for (String key : builtins.keySet())
-            if (key.startsWith(name))
-                return Optional.of(key);
+            if (key.startsWith(name)) {
+                List<String> set = new ArrayList<>();
+                set.add(key);
+                return set;
+            }
 
         return pathFinder.findCommandKey(name);
     }

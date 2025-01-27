@@ -6,6 +6,7 @@ import prompt.PromptInputTokenizer;
 import prompt.PromptTranslator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Shell {
@@ -13,10 +14,14 @@ public class Shell {
     private final CommandFactory commandFactory;
 
     private StringBuilder builder;
+    private List<String> autoCompleteOptions;
+    private boolean showAutoCompleteOptions;
 
     public Shell(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
         this.builder = new StringBuilder();
+        this.autoCompleteOptions = new ArrayList<>();
+        this.showAutoCompleteOptions = false;
     }
 
     public void startRepl() throws IOException {
@@ -49,7 +54,13 @@ public class Shell {
                 break;
             } else if (ch == '\b' || ch == 127) {
                 deleteLastLetter();
-            } else if (ch == '\t') {
+            } else if (ch == '\t' && showAutoCompleteOptions) {
+                String options = String.join(" ", autoCompleteOptions);
+                System.out.println("\n" + options);
+                showAutoCompleteOptions = false;
+                autoCompleteOptions.clear();
+                System.out.print("$ " + builder);
+            }else if (ch == '\t') {
                 autoComplete();
             } else {
                 System.out.print(ch);
@@ -71,19 +82,24 @@ public class Shell {
 
     private void autoComplete() {
         if (!builder.isEmpty()) {
-            commandFactory
-                    .findCommandKey(builder.toString())
-                    .ifPresentOrElse(
-                            commandName -> {
-                                while (!builder.isEmpty()) {
-                                    System.out.print("\b \b");
-                                    builder.deleteCharAt(builder.length() - 1);
-                                }
-                                builder = new StringBuilder(commandName + " ");
-                                System.out.print(builder);
-                            },
-                            () -> System.out.print('\u0007')
-                    );
+            autoCompleteOptions = commandFactory.findCommandKey(builder.toString());
+
+            if (autoCompleteOptions.size() == 1) {
+                String commandName = autoCompleteOptions.getFirst();
+
+                while (!builder.isEmpty()) {
+                    System.out.print("\b \b");
+                    builder.deleteCharAt(builder.length() - 1);
+                }
+
+                builder = new StringBuilder(commandName + " ");
+                System.out.print(builder);
+            } else {
+                if (autoCompleteOptions.size() > 1)
+                    showAutoCompleteOptions = true;
+
+                System.out.print('\u0007');
+            }
         }
     }
 
