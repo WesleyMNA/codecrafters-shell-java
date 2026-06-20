@@ -18,7 +18,7 @@ public class Terminal {
     public void run() {
         while (true) {
             System.out.print("$ ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().toLowerCase().trim();
             CommandResult result = shell.execute(input);
 
             if (result.exit())
