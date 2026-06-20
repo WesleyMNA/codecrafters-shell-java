@@ -1,14 +1,12 @@
 package application;
 
-import domain.commands.Command;
-import domain.commands.CommandNotFound;
-import domain.commands.EchoCommand;
-import domain.commands.ExitCommand;
+import domain.CommandExistenceValidator;
+import domain.commands.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandFactory {
+public class CommandFactory implements CommandExistenceValidator {
 
     private final Map<String, Command> commands;
 
@@ -16,6 +14,7 @@ public class CommandFactory {
         this.commands = new HashMap<>();
         this.add(new ExitCommand());
         this.add(new EchoCommand());
+        this.add(new TypeCommand(this));
     }
 
     private void add(Command command) {
@@ -24,5 +23,10 @@ public class CommandFactory {
 
     public Command create(String input) {
         return commands.getOrDefault(input, new CommandNotFound());
+    }
+
+    @Override
+    public boolean exists(String input) {
+        return commands.containsKey(input);
     }
 }
