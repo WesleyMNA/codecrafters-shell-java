@@ -2,6 +2,7 @@ package application;
 
 import domain.commands.Command;
 import domain.commands.CommandNotFound;
+import domain.commands.EchoCommand;
 import domain.commands.ExitCommand;
 
 import java.util.HashMap;
@@ -13,8 +14,12 @@ public class CommandFactory {
 
     public CommandFactory() {
         this.commands = new HashMap<>();
-        var exit = new ExitCommand();
-        this.commands.put(exit.name(), exit);
+        this.add(new ExitCommand());
+        this.add(new EchoCommand());
+    }
+
+    private void add(Command command) {
+        this.commands.put(command.name(), command);
     }
 
     public Command create(String input) {
